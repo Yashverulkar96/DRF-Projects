@@ -22,10 +22,11 @@ def user(request):
 
 @api_view(['GET','PUT','PATCH','DELETE'])
 def user_details(request,pk):
+    user = None
     try:
-        user=User.objects.get(pk=pk)
-    except user.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return Response({"Error message": "User not found"},status=status.HTTP_404_NOT_FOUND)
     
     if request.method =='GET':
         serializer=UserSerializer(user)

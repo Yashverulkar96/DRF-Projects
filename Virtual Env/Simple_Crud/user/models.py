@@ -17,7 +17,7 @@ class User(models.Model):
 
 class Address(models.Model):
     Address=models.TextField()
-    # address will automatically delete is user is deleted.
+    # address will automatically delete if user is deleted.
     User=models.ForeignKey(User, on_delete=models.CASCADE, blank=True , null=True)
 
     def __str__(self):

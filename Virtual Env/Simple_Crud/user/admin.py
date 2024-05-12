@@ -8,5 +8,5 @@ class AdminUser(admin.ModelAdmin):
 class AdminAddress(admin.ModelAdmin):
     list_display=['Address','User']
 
-admin.site.register(User)
-admin.site.register(Address)
+admin.site.register(User,AdminUser)
+admin.site.register(Address, AdminAddress)
