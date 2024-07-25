@@ -32,26 +32,35 @@ class User_details(APIView):
         try:
             return Users.objects.get(pk=pk) 
         except Users.DoesNotExist:
-            return Response({"msg":"Data not found"},status= status.HTTP_404_NOT_FOUND)
+            return None
         
     def get(self,request,pk, format=None):
         user=self.get_user(pk)
-        serializer=UserSerializer(user)
-        return Response(serializer.data)
+        if user is not None:
+            serializer=UserSerializer(user)
+            return Response(serializer.data)
+        else :
+            return Response({"msg":"Data not found"},status= status.HTTP_404_NOT_FOUND)
         
     
     def put(self, request, pk, format=None):
         user=self.get_user(pk)
-        serializer=UserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if user is not None:
+            serializer=UserSerializer(user, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+           return Response({"msg":"Data not avialable for update"},status= status.HTTP_404_NOT_FOUND) 
     
     def delete(self, request, pk, format=None):
         user=self.get_user(pk)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if user is not None:
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({"msg":"Data not available to delete"},status= status.HTTP_404_NOT_FOUND) 
 
 # ---------------------------------------------------------------------
 
